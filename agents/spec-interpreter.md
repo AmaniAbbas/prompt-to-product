@@ -64,11 +64,13 @@ may exist in schema but should not create extra UX or product workflows unless e
 
 ### 5. Output must follow template
 
-Use:
-templates/EXECUTION_PLAN_TEMPLATE.md
+Must follow:
+- EXECUTION_PLAN_TEMPLATE.md
+- docs/TASK_GENERATION_RULES.md
+
 
 Output only:
-projects/fitness-app/execution/EXECUTION_PLAN.md
+{project_root}/execution/EXECUTION_PLAN.md
 
 ### 6. Do not remove required features
 

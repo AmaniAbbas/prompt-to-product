@@ -1,0 +1,23 @@
+-- Migration: T-02-06
+-- Applies indexes on coach_id, client_id, org_id across all relevant tables.
+--
+-- AUDIT RESULT: All implementable indexes were already created inline with
+-- their respective CREATE TABLE migrations (T-02-01 through T-02-05).
+-- No new indexes are added here.
+--
+-- Two entries in the T-02-06 acceptance criteria cannot be implemented
+-- because the referenced columns do not exist in the schema:
+--
+--   1. workout_template_exercises(coach_id)
+--      The workout_template_exercises table has no coach_id column.
+--      Schema columns: id, template_id, exercise_id, position, sets,
+--      reps, weight, rest, rpe, tempo, notes.
+--      Requires schema clarification before an index can be added.
+--
+--   2. client_profiles(client_id)
+--      The client_profiles table has no client_id column.
+--      The client identity is stored as user_id (REFERENCES users(id)).
+--      idx_client_profiles_user_id already exists on that column.
+--      Requires task acceptance criteria correction.
+--
+-- No action taken for either item pending clarification.

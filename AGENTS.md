@@ -29,12 +29,46 @@ If something is unclear, ask.
 
 ---
 
+## Required Context Loading
+
+Before executing any task, agents must load and follow:
+
+- AGENTS.md
+- docs/CODING_STANDARDS.md
+- docs/ARCHITECTURE_PRINCIPLES.md
+- docs/QA_STANDARDS.md
+- docs/TASK_GENERATION_RULES.md
+- docs/TEMPLATES.md
+- the assigned task file
+- relevant project specification files
+
+Relevant specification files may include:
+- PRD.md
+- ARCHITECTURE.md
+- SCHEMA.md
+- EXECUTION_PLAN.md
+- TASKS.md
+
+Agents must treat these files as authoritative.
+
+If conflicts, ambiguity, or missing requirements exist:
+- stop implementation
+- report the ambiguity
+- request clarification
+
+Agents must not begin implementation until required context is loaded.
+
+---
+
 ## Agents
 
 ### Spec Interpreter
 
 * Reads PRD, ARCHITECTURE, SCHEMA
 * Outputs EXECUTION_PLAN.md
+
+Must also follow:
+- docs/TASK_GENERATION_RULES.md
 
 ---
 ## Scope Control Rules
@@ -69,6 +103,9 @@ unless explicitly approved.
 * Tracks progress
 * Routes bugs
 
+Must also follow:
+- docs/TASK_GENERATION_RULES.md
+
 ---
 
 ### Backend Agent
@@ -93,12 +130,18 @@ unless explicitly approved.
 * Tests features
 * Reports bugs only
 
+Must flag task/spec mismatches against:
+- docs/TASK_GENERATION_RULES.md
+
 ---
 
 ### Reviewer Agent
 
 * Reviews code quality
 * Enforces standards
+
+Must verify generated tasks follow:
+- docs/TASK_GENERATION_RULES.md
 
 ---
 
@@ -107,22 +150,92 @@ unless explicitly approved.
 * Always work slice-by-slice
 * Never skip QA
 * Never mark done without review
-* Always follow templates
+* Always follow output templates defined in:
+  - docs/TEMPLATES.md
+  - TASK_TEMPLATE.md
+  - EXECUTION_PLAN_TEMPLATE.md
+  - BUG_TEMPLATE.md
 
 ---
 
-## Project Structure
+## Project Path Variables
 
-Each project is under:
+Agents must never hardcode project-specific paths in global rules.
 
-projects/<project-name>/
+Use these variables:
 
-With:
+- `{project_name}` = current project folder name
+- `{project_root}` = `projects/{project_name}`
 
-* spec/
-* execution/
-* tasks/
-* qa/
+Examples:
+
+- `{project_root}/spec/PRD.md`
+- `{project_root}/spec/ARCHITECTURE.md`
+- `{project_root}/spec/SCHEMA.md`
+- `{project_root}/execution/EXECUTION_PLAN.md`
+- `{project_root}/tasks/TASKS.md`
+- `{project_root}/qa/BUG_REPORTS.md`
+
+---
+
+## Standard Project Structure
+
+Every project must follow this structure:
+
+projects/{project_name}/
+├── spec/
+│   ├── PRD.md
+│   ├── ARCHITECTURE.md
+│   ├── SCHEMA.md
+│   ├── CODING_STANDARDS.md
+│   └── ARCHITECTURE_PRINCIPLES.md
+│
+├── execution/
+│   ├── EXECUTION_PLAN.md
+│   └── TASKS.md
+│
+├── tasks/
+│   ├── TASK_TEMPLATE.md
+│   ├── BUG_TEMPLATE.md
+│   └── EXECUTION_PLAN_TEMPLATE.md
+│
+├── qa/
+│   ├── QA_REPORTS.md
+│   └── BUG_REPORTS.md
+│
+└── app/ (implementation)
+
+Agents must not invent alternative folders or filenames unless explicitly approved.
+
+---
+
+## Build Ownership Rules
+
+A task is not complete unless:
+- npm install succeeds
+- npm run build succeeds
+- TypeScript passes
+- newly introduced dependencies compile correctly
+
+Agents own dependency issues introduced by their changes.
+
+Dependency upgrades are not considered complete until the application builds successfully.
+
+---
+
+## Abstraction Rules
+
+Do not introduce abstractions prematurely.
+
+New utilities, wrappers, helpers, hooks, services, or shared layers must solve a real current problem.
+
+Avoid:
+- speculative abstractions
+- future-proofing abstractions
+- unused shared utilities
+- generic wrappers with only one caller
+
+Prefer direct implementation until reuse is proven.
 
 ---
 

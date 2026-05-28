@@ -457,9 +457,11 @@ Add indexes on `coach_id`, `client_id`, and `org_id` across all tables where tho
 - Index migration applied to all relevant tables
 
 #### Acceptance Criteria
-- Indexes exist on `coach_id` in: `client_profiles`, `workout_templates`, `workout_template_exercises`, `assigned_workouts`, `check_ins`, `progress_photos`, `comments`, `notification_settings`, `client_payment_links`
-- Indexes exist on `client_id` in: `client_profiles`, `assigned_workouts`, `check_ins`, `progress_photos`, `comments`, `client_payment_links`
+- Indexes exist on `coach_id` in: `client_profiles`, `workout_templates`, `assigned_workouts`, `check_ins`, `progress_photos`, `comments`, `notification_settings`, `client_payment_links`
+- Indexes exist on `client_id` in: `assigned_workouts`, `check_ins`, `progress_photos`, `comments`, `client_payment_links`
+- Index exists on `user_id` in `client_profiles`
 - Indexes exist on `org_id` in: `users`, `exercises`, `workout_templates`, `assigned_workouts`, `check_ins`, `comments`
+- No index required on `workout_template_exercises.coach_id` because the column does not exist; access is derived through `template_id → workout_templates.coach_id`
 - All indexes confirmed in Supabase dashboard
 
 #### Out of Scope
